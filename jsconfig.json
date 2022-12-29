@@ -14,8 +14,8 @@
 			"@layout/*": [
 				"layout/*"
 			],
-			"@rooks/*": [
-				"rooks/*"
+			"@hooks/*": [
+				"hooks/*"
 			],
 			"@services/*": [
 				"services/*"
