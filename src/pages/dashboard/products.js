@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react';
 import Modal from '@common/Modal';
-import { CheckIcon } from '@heroicons/react/24/solid';
+import { CheckIcon, XCircleIcon } from '@heroicons/react/24/solid';
 import { PlusIcon } from '@heroicons/react/24/solid';
 import FormProduct from '@components/FormProduct';
 import axios from 'axios';
 import endPoints from '@services/api';
 import useAlert from '@hooks/useAlert';
 import Alert from '@common/Alert';
+import { deleteProduct } from '@services/api/products';
 
 export default function Products() {
   const [open, setOpen] = useState(false);
@@ -24,6 +25,26 @@ export default function Products() {
       console.log(error);
     }
   }, [alert]);
+
+  const handleDelete = (id) => {
+    deleteProduct(id)
+      .then(() => {
+        setAlert({
+          active: true,
+          message: 'Delete product succesfully',
+          type: 'success',
+          autoClose: false,
+        });
+      })
+      .catch((error) => {
+        setAlert({
+          active: true,
+          message: error.message,
+          type: 'error',
+          autoClose: false,
+        });
+      });
+  };
   return (
     <>
       <Alert alert={alert} handleClose={toggleAlert} />
@@ -33,7 +54,7 @@ export default function Products() {
         </div>
         <div className="mt-5 flex lg:mt-0 lg:ml-4">
           <span className="sm:ml-3">
-            <button 
+            <button
               type="button"
               className="inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
               onClick={() => setOpen(true)}
@@ -98,9 +119,7 @@ export default function Products() {
                         </a>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                        <a href="/edit" className="text-indigo-600 hover:text-indigo-900">
-                          Delete
-                        </a>
+                        <XCircleIcon className="flex-shrink-0 h-6 w-6 text-gray-400 cursor-pointer" aria-hidden="true" onClick={() => handleDelete(product.id)} />
                       </td>
                     </tr>
                   ))}
